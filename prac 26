@@ -1,0 +1,81 @@
+Set 26 
+Collection “orderinfo“ which contains the documents given as below 
+{  
+cust_id:123  
+cust_name:”abc”,  
+status:”A”,  
+price:250  
+}  
+1) find the average price for each customers having status 'A'  
+2) Display the status of the customers whose amount/price lie between 100 and 1000  
+3) Display the customers information without “_id” .  
+4) create a simple index on onderinfo collection and fire the queries.
+
+
+
+use orderdb
+
+db.createCollection("orderinfo")
+
+db.orderinfo.insertMany([
+{
+cust_id:123,
+cust_name:"abc",
+status:"A",
+price:250
+},
+{
+cust_id:124,
+cust_name:"om",
+status:"B",
+price:500
+},
+{
+cust_id:125,
+cust_name:"krushna",
+status:"A",
+price:700
+}
+])
+
+// 1. Average price for status A
+
+db.orderinfo.aggregate([
+{
+$match:{status:"A"}
+},
+{
+$group:{
+_id:null,
+avg_price:{$avg:"$price"}
+}
+}
+])
+
+// 2. Display customers whose price is between 100 and 1000
+
+db.orderinfo.find(
+{
+price:{
+$gte:100,
+$lte:1000
+}
+}
+)
+
+// 3. Display customer information without _id
+
+db.orderinfo.find(
+{},
+{
+_id:0
+}
+)
+
+// 4. Create index
+
+db.orderinfo.createIndex(
+{
+cust_name:1
+}
+)
