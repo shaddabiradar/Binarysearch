@@ -1,0 +1,81 @@
+CREATE TABLE Person (
+    driver_id INT PRIMARY KEY,
+    name VARCHAR(50),
+    address VARCHAR(100)
+);
+
+CREATE TABLE Car (
+    license VARCHAR(20) PRIMARY KEY,
+    model VARCHAR(50),
+    year INT
+);
+
+CREATE TABLE Accident (
+    report_no INT PRIMARY KEY,
+    date_acc DATE,
+    location VARCHAR(100)
+);
+
+CREATE TABLE Owns (
+    driver_id INT,
+    license VARCHAR(20),
+    PRIMARY KEY(driver_id, license),
+    FOREIGN KEY(driver_id) REFERENCES Person(driver_id),
+    FOREIGN KEY(license) REFERENCES Car(license)
+);
+
+CREATE TABLE Participated (
+    driver_id INT,
+    model VARCHAR(50),
+    report_no INT,
+    damage_amount DECIMAL(10,2),
+    PRIMARY KEY(driver_id, report_no),
+    FOREIGN KEY(driver_id) REFERENCES Person(driver_id)
+);
+INSERT INTO Person VALUES (1, 'Amit', 'Pune');
+INSERT INTO Person VALUES (2, 'Sneha', 'Mumbai');
+INSERT INTO Person VALUES (3, 'Rahul', 'Nashik');
+INSERT INTO Person VALUES (4, 'Priya', 'Nagpur');
+INSERT INTO Person VALUES (5, 'Karan', 'Solapur');
+
+INSERT INTO Car VALUES ('MH12AB1010', 'Honda City', 2020);
+INSERT INTO Car VALUES ('MH14CD2020', 'Swift', 2019);
+INSERT INTO Car VALUES ('MH15EF3030', 'i20', 2021);
+INSERT INTO Car VALUES ('MH16GH4040', 'Creta', 2022);
+INSERT INTO Car VALUES ('MH17IJ5050', 'Baleno', 2018);
+
+INSERT INTO Accident VALUES (101, TO_DATE('2025-01-10','YYYY-MM-DD'), 'Pune');
+INSERT INTO Accident VALUES (102, TO_DATE('2025-02-15','YYYY-MM-DD'), 'Mumbai');
+INSERT INTO Accident VALUES (103, TO_DATE('2025-03-20','YYYY-MM-DD'), 'Nashik');
+INSERT INTO Accident VALUES (104, TO_DATE('2025-04-05','YYYY-MM-DD'), 'Nagpur');
+INSERT INTO Accident VALUES (105, TO_DATE('2025-05-01','YYYY-MM-DD'), 'Solapur');
+
+INSERT INTO Owns VALUES (1, 'MH12AB1010');
+INSERT INTO Owns VALUES (2, 'MH14CD2020');
+INSERT INTO Owns VALUES (3, 'MH15EF3030');
+INSERT INTO Owns VALUES (4, 'MH16GH4040');
+INSERT INTO Owns VALUES (5, 'MH17IJ5050');
+
+INSERT INTO Participated VALUES (1, 'Honda City', 101, 15000);
+INSERT INTO Participated VALUES (2, 'Swift', 102, 8000);
+INSERT INTO Participated VALUES (3, 'i20', 103, 12000);
+INSERT INTO Participated VALUES (4, 'Creta', 104, 20000);
+INSERT INTO Participated VALUES (5, 'Baleno', 105, 5000);
+DESC Person;
+DESC Car;
+DESC Accident;
+DESC Owns;
+DESC Participated;
+ALTER TABLE Participated
+ADD CONSTRAINT fk_report
+FOREIGN KEY(report_no)
+REFERENCES Accident(report_no);
+ALTER TABLE Participated
+ADD CONSTRAINT chk_damage
+CHECK (damage_amount >= 0);
+ALTER TABLE Person
+MODIFY name VARCHAR(50) NOT NULL;
+RENAME Car TO Vehicle;
+CREATE TABLE new_person AS
+SELECT * FROM Person;
+DROP TABLE new_person;
