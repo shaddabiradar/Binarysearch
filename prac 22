@@ -1,0 +1,88 @@
+Set 22 
+PL/SQL Stored Procedure.  
+Write a Stored Procedure namely proc_Grade for the categorization of student. If marks scored by students 
+in examination is <=1500 and marks>=990 then student will be placed in distinction category if marks 
+scored are between 989 and900 category is first class, if marks 899 and 825 category is Higher Second Class 
+Write a PL/SQL block for using procedure created with above requirement. Stud_Marks(name, 
+total_marks) Result(Roll,Name, Class). 
+
+
+
+
+CREATE TABLE Stud_Marks
+(
+    Roll NUMBER PRIMARY KEY,
+    Name VARCHAR2(20),
+    Total_Marks NUMBER
+);
+CREATE TABLE Result
+(
+    Roll NUMBER,
+    Name VARCHAR2(20),
+    Class VARCHAR2(30)
+);
+INSERT INTO Stud_Marks VALUES (1, 'Amit', 1200);
+INSERT INTO Stud_Marks VALUES (2, 'Neha', 950);
+INSERT INTO Stud_Marks VALUES (3, 'Rahul', 850);
+INSERT INTO Stud_Marks VALUES (4, 'Sneha', 780);
+
+
+
+CREATE OR REPLACE PROCEDURE proc_Grade
+(
+    rno NUMBER,
+    sname VARCHAR2,
+    marks NUMBER
+)
+IS
+    class1 VARCHAR2(30);
+
+BEGIN
+
+    IF marks <= 1500 AND marks >= 990 THEN
+        class1 := 'Distinction';
+
+    ELSIF marks BETWEEN 900 AND 989 THEN
+        class1 := 'First Class';
+
+    ELSIF marks BETWEEN 825 AND 899 THEN
+        class1 := 'Higher Second Class';
+
+    ELSE
+        class1 := 'Fail';
+
+    END IF;
+
+    INSERT INTO Result
+    VALUES (rno, sname, class1);
+
+END;
+/
+DECLARE
+    rno NUMBER;
+    sname VARCHAR2(20);
+    marks NUMBER;
+
+BEGIN
+
+    rno := &roll_no;
+
+    SELECT Name, Total_Marks
+    INTO sname, marks
+    FROM Stud_Marks
+    WHERE Roll = rno;
+
+    proc_Grade(rno, sname, marks);
+
+    DBMS_OUTPUT.PUT_LINE('Grade inserted successfully');
+
+EXCEPTION
+
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Student not found');
+
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error occurred');
+
+END;
+/
