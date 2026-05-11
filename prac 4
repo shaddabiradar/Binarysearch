@@ -1,3 +1,15 @@
+Set 4 
+Create Employee and Department table  by identifying Primary key and  foreign keys  
+Employee (emp_id, emp_name, city, salary, department) 
+Department (dept_id, dept_name, location) 
+1. Display schema of each table. 
+2. Insert 10 records in each table 
+3. Update the city to 'Pune' for employees working in the 'IT' department. 
+4. Delete employee records whose salary is greater than 100000. 
+5. Display employee name and salary after deducting 5% tax. 
+6. Display employees who do not live in 'Mumbai' and whose names start with a. 
+7. Display employees who belong to 'IT' department and have salary greater than 50000
+
 CREATE TABLE Department1(
     dept_id NUMBER PRIMARY KEY,
     dept_name VARCHAR2(20),
