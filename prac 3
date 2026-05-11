@@ -1,3 +1,16 @@
+Set 3 
+Create Employee and Department table  by identifying Primary key and  foreign keys and solve the 
+following queries 
+Employee (emp_id, emp_name, city, salary, department) 
+Department (dept_id, dept_name, location) 
+1. Display schema of each table.in each table. 
+2. Insert 10 records in each table 
+3. Insert a new department into the Department table. 
+4. Insert an employee record without specifying the salary column. 
+5. Update the salary of all employees by adding 20% increment. 
+6. Display employee name and annual salary of employees whose names having the second letter e. 
+7. Update the city to 'Pune' for employees working in the 'IT' department. 
+
 CREATE TABLE Department (
     dept_id NUMBER PRIMARY KEY,
     dept_name VARCHAR2(20),
