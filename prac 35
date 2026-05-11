@@ -1,0 +1,117 @@
+Set 35 
+Employee(employee_name,street,city) 
+Works(employee_name,company_name,salary) 
+Company(company_name,city) 
+Manages(employee_name,manager_name) 
+1) Find all employees in the database who earn more than each employee of  Small  Bank  Coorporation 
+2) Assume that the company is may be located in several cities. Find all companies located in every city 
+in which Small Bank Coorporation is located. 
+3) Find all employees who earn more than the average salary of all employees of their companies. 
+4) Find the company that has the most employees. 
+5) Find the company that has the smallest payroll. 
+6) Find those companies whose employees earn a higher salary, on average, than the average salary at 
+First Bank Coorporation.  
+7) Modify the database so that “Jones” now lives in Newtown.
+
+
+
+
+CREATE TABLE Employee(
+    employee_name VARCHAR2(50),
+    street VARCHAR2(50),
+    city VARCHAR2(50)
+);
+
+CREATE TABLE Works(
+    employee_name VARCHAR2(50),
+    company_name VARCHAR2(50),
+    salary NUMBER
+);
+
+CREATE TABLE Company(
+    company_name VARCHAR2(50),
+    city VARCHAR2(50)
+);
+
+CREATE TABLE Manages(
+    employee_name VARCHAR2(50),
+    manager_name VARCHAR2(50)
+);
+
+INSERT INTO Employee VALUES('Rahul','MG Road','Pune');
+INSERT INTO Employee VALUES('Amit','FC Road','Mumbai');
+INSERT INTO Employee VALUES('Sneha','JM Road','Pune');
+INSERT INTO Employee VALUES('Jones','Park Street','Delhi');
+
+INSERT INTO Works VALUES('Rahul','First Bank Corporation',15000);
+INSERT INTO Works VALUES('Amit','Small Bank Corporation',9000);
+INSERT INTO Works VALUES('Sneha','First Bank Corporation',20000);
+INSERT INTO Works VALUES('Jones','ABC Company',25000);
+
+INSERT INTO Company VALUES('First Bank Corporation','Pune');
+INSERT INTO Company VALUES('Small Bank Corporation','Mumbai');
+INSERT INTO Company VALUES('ABC Company','Delhi');
+
+INSERT INTO Manages VALUES('Rahul','Sneha');
+INSERT INTO Manages VALUES('Amit','Rahul');
+
+SELECT employee_name
+FROM Works
+WHERE salary > ALL
+(
+    SELECT salary
+    FROM Works
+    WHERE company_name='Small Bank Corporation'
+);
+
+SELECT company_name
+FROM Company
+WHERE city IN
+(
+    SELECT city
+    FROM Company
+    WHERE company_name='Small Bank Corporation'
+);
+
+SELECT employee_name
+FROM Works W1
+WHERE salary >
+(
+    SELECT AVG(salary)
+    FROM Works W2
+    WHERE W1.company_name=W2.company_name
+);
+
+SELECT company_name
+FROM Works
+GROUP BY company_name
+HAVING COUNT(*)=
+(
+    SELECT MAX(COUNT(*))
+    FROM Works
+    GROUP BY company_name
+);
+
+SELECT company_name
+FROM Works
+GROUP BY company_name
+HAVING SUM(salary)=
+(
+    SELECT MIN(SUM(salary))
+    FROM Works
+    GROUP BY company_name
+);
+
+SELECT company_name
+FROM Works
+GROUP BY company_name
+HAVING AVG(salary)>
+(
+    SELECT AVG(salary)
+    FROM Works
+    WHERE company_name='First Bank Corporation'
+);
+
+UPDATE Employee
+SET city='Newtown'
+WHERE employee_name='Jones';
