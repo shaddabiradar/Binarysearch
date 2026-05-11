@@ -1,3 +1,14 @@
+Create Customer and Account table and add rows shown below  
+1) Show the cname, Acc_Type, amount information of customer who is having an saving account. 
+2. Display the data using Natural, left and right join. 
+3. Display the information of customers living in the same city as of ‘pooja’. 
+4. Display the information of account, having less amount than average amount throughout the bank. 
+5. Display the C_id having maximum amount in account. 
+6. Display the amount and acc_type of those customers whose amount is the minimum amount of that 
+Acc_type. 
+7. Display the amount of those accounts whose amount is higher than amount of any saving account 
+amount. 
+
 CREATE TABLE Customer (
     C_Id NUMBER PRIMARY KEY,
     Cname VARCHAR2(20),
