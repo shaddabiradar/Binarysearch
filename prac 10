@@ -1,0 +1,60 @@
+Set 10 
+Create the employee table with all constraints and solve the following queries. - 
+Employee (emp_id, emp_name, department, city, salary) 
+1. Department-wise total salary greater than 2,00,000 
+2. Department-wise average salary more than 40,000 
+3. Display city-wise number of employees. 
+4. Display department-wise maximum salary. 
+5. Display city-wise average salary. 
+6. Display department-wise employee count where the number of employees is more than 3. 
+7. Display city-wise employee count in ascending order. 
+
+
+
+
+CREATE TABLE employee (
+    emp_id NUMBER(6) PRIMARY KEY,
+    emp_name VARCHAR2(30) NOT NULL,
+    department VARCHAR2(30) NOT NULL,
+    city VARCHAR2(30) NOT NULL,
+    salary NUMBER(8,2) NOT NULL
+);
+
+SELECT department,
+       SUM(salary) AS TOTAL_SALARY
+FROM employee
+GROUP BY department
+HAVING SUM(salary) > 200000;
+
+SELECT department,
+       AVG(salary) AS AVERAGE_SALARY
+FROM employee
+GROUP BY department
+HAVING AVG(salary) > 40000;
+
+SELECT city,
+       COUNT(*) AS EMPLOYEE_COUNT
+FROM employee
+GROUP BY city;
+
+SELECT department,
+       MAX(salary) AS MAXIMUM_SALARY
+FROM employee
+GROUP BY department;
+
+SELECT city,
+       AVG(salary) AS AVERAGE_SALARY
+FROM employee
+GROUP BY city;
+
+SELECT department,
+       COUNT(*) AS EMPLOYEE_COUNT
+FROM employee
+GROUP BY department
+HAVING COUNT(*) > 3;
+
+SELECT city,
+       COUNT(*) AS EMPLOYEE_COUNT
+FROM employee
+GROUP BY city
+ORDER BY EMPLOYEE_COUNT ASC;
