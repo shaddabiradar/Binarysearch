@@ -1,0 +1,125 @@
+use Employee
+
+db.createCollection("emp1")
+
+db.emp1.insertMany([
+{
+eno:1,
+ename:"Om",
+address:"Pune",
+sal:4000
+},
+{
+eno:2,
+ename:"Krushna",
+address:"Mumbai",
+sal:12000
+},
+{
+eno:3,
+ename:"Nikhil",
+address:"Nagar",
+sal:18000
+},
+{
+eno:4,
+ename:"Neha",
+address:"Pune",
+sal:22000
+},
+{
+eno:5,
+ename:"Pooja",
+address:"Satara",
+sal:8000
+}
+])
+
+// 1. Display all documents
+
+db.emp1.find()
+
+// 2. Display employees having salary greater than 5000
+
+db.emp1.find(
+{
+sal:{$gt:5000}
+}
+)
+
+// 3. Display employees having salary less than 15000
+
+db.emp1.find(
+{
+sal:{$lt:15000}
+}
+)
+
+// 4. Display employees having salary between 10000 and 20000
+
+db.emp1.find(
+{
+sal:{
+$gt:10000,
+$lt:20000
+}
+}
+)
+
+// 5. Update salary of all employees with 10% increment
+
+db.emp1.updateMany(
+{},
+{
+$mul:{sal:1.10}
+}
+)
+
+// 6. Delete employees having salary less than 5000
+
+db.emp1.deleteMany(
+{
+sal:{$lt:5000}
+}
+)
+
+// 7. Rename collection
+
+db.emp1.renameCollection("employee1")
+
+// 8. Display employees whose name starts with n
+
+db.employee1.find(
+{
+ename:/^n/i
+}
+)
+
+// 9. Sort names in ascending order
+
+db.employee1.find().sort(
+{
+ename:1
+}
+)
+
+// 10. Create new database
+
+use Employee1
+
+// 11. Drop database
+
+db.dropDatabase()
+
+// 12. Create collection using insert
+
+db.emp1.insertOne(
+{
+eno:1,
+ename:"Om"
+}
+)
+
+// 13. Drop collection
+
+db.emp1.drop()
