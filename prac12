@@ -1,0 +1,93 @@
+Set 12 
+Create the tables below and solve the following queries. 
+Employees 
+ Name                                      Null?                    Type 
+ ----------------------------------------- -------- ---------------------------- 
+ EMPLOYEE_ID                   NOT NULL     NUMBER(6) 
+ FIRST_NAME                                              VARCHAR2(20) 
+ LAST_NAME                       NOT NULL    VARCHAR2(25) 
+ EMAIL                                  NOT NULL    VARCHAR2(25) 
+ PHONE_NUMBER                                      VARCHAR2(20) 
+ HIRE_DATE                        NOT NULL     DATE 
+ JOB_ID                                 NOT NULL    VARCHAR2(10) 
+ SALARY                                                      NUMBER(8,2) 
+ COMMISSION_PCT                                   NUMBER(2,2) 
+ MANAGER_ID                                            NUMBER(6) 
+ DEPARTMENT_ID                                     NUMBER(4) 
+  
+Departments 
+ Name                                      Null?             Type 
+ ----------------------------------------- -------- ---------------------------- 
+ DEPARTMENT_ID            NOT NULL        NUMBER(4) 
+ DEPARTMENT_NAME    NOT NULL        VARCHAR2(30) 
+ MANAGER_ID                                               NUMBER(6) 
+ LOCATION_ID                                               NUMBER(4) 
+  
+1.Write a query for the HR department to produce the addresses of all the departments. Use the EMP and 
+DEPT tables. Show the EMPNO, ENAME,SAL,DNAME and LOC in the output. Use a NATURAL JOIN to produce 
+the results. 
+2.The HR department needs a report of all employees. Write a query to display the JOB, MGR, 
+SAL,COMM,DNAME of employees whose JOB is SALESMAN. 
+3.The HR department needs a report of employees in LOC DALLAS. Display the ENAME,job, DEPTNO and 
+DNAME for all employees who work in DALLAS. 
+4.Modify the previous Query to diaplay all employees including King,who has no manager.Order the results 
+by the employee number.
+
+
+
+CREATE TABLE departments (
+    department_id NUMBER(4) PRIMARY KEY,
+    department_name VARCHAR2(30) NOT NULL,
+    manager_id NUMBER(6),
+    location_id NUMBER(4)
+);
+
+CREATE TABLE employees (
+    employee_id NUMBER(6) PRIMARY KEY,
+    first_name VARCHAR2(20),
+    last_name VARCHAR2(25) NOT NULL,
+    email VARCHAR2(25) NOT NULL,
+    phone_number VARCHAR2(20),
+    hire_date DATE NOT NULL,
+    job_id VARCHAR2(10) NOT NULL,
+    salary NUMBER(8,2),
+    commission_pct NUMBER(2,2),
+    manager_id NUMBER(6),
+    department_id NUMBER(4),
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+
+SELECT employee_id,
+       first_name,
+       salary,
+       department_name,
+       location_id
+FROM employees
+NATURAL JOIN departments;
+
+SELECT job_id,
+       manager_id,
+       salary,
+       commission_pct,
+       department_name
+FROM employees
+NATURAL JOIN departments
+WHERE job_id = 'SALESMAN';
+
+SELECT first_name,
+       job_id,
+       department_id,
+       department_name
+FROM employees
+NATURAL JOIN departments
+WHERE department_name = 'DALLAS';
+
+SELECT employee_id,
+       first_name,
+       job_id,
+       department_id,
+       department_name
+FROM employees
+LEFT OUTER JOIN departments
+USING(department_id)
+ORDER BY employee_id;
