@@ -1,0 +1,85 @@
+CREATE TABLE Customer (
+    C_Id NUMBER PRIMARY KEY,
+    Cname VARCHAR2(20),
+    City VARCHAR2(20)
+);
+CREATE TABLE Account (
+    C_Id NUMBER,
+    Acc_Type VARCHAR2(20),
+    Amount NUMBER,
+    FOREIGN KEY (C_Id) REFERENCES Customer(C_Id)
+);
+INSERT INTO Customer VALUES (1,'John','Nashik');
+INSERT INTO Customer VALUES (2,'Seema','Aurangabad');
+INSERT INTO Customer VALUES (3,'Amita','Nagar');
+INSERT INTO Customer VALUES (4,'Rakesh','Pune');
+INSERT INTO Customer VALUES (5,'Samata','Nashik');
+INSERT INTO Customer VALUES (6,'Ankita','Chandwad');
+INSERT INTO Customer VALUES (7,'Bhavika','Pune');
+INSERT INTO Customer VALUES (8,'Deepa','Mumbai');
+INSERT INTO Customer VALUES (9,'Nitin','Nagpur');
+INSERT INTO Customer VALUES (10,'Pooja','Pune');
+INSERT INTO Account VALUES (1,'Current',5000);
+INSERT INTO Account VALUES (2,'Saving',20000);
+INSERT INTO Account VALUES (3,'Saving',70000);
+INSERT INTO Account VALUES (4,'Saving',50000);
+INSERT INTO Account VALUES (5,'Current',35000);
+INSERT INTO Account VALUES (6,'Loan',30000);
+INSERT INTO Account VALUES (7,'Saving',50000);
+INSERT INTO Account VALUES (8,'Saving',90000);
+INSERT INTO Account VALUES (9,'Loan',8000);
+INSERT INTO Account VALUES (10,'Current',45000);
+SELECT C.Cname, A.Acc_Type, A.Amount
+FROM Customer C
+JOIN Account A
+ON C.C_Id = A.C_Id
+WHERE A.Acc_Type = 'Saving';
+SELECT *
+FROM Customer
+NATURAL JOIN Account;
+SELECT *
+FROM Customer C
+LEFT JOIN Account A
+ON C.C_Id = A.C_Id;
+SELECT *
+FROM Customer C
+RIGHT JOIN Account A
+ON C.C_Id = A.C_Id;
+SELECT *
+FROM Customer
+WHERE City =
+(
+   SELECT City
+   FROM Customer
+   WHERE Cname = 'Pooja'
+);
+SELECT *
+FROM Account
+WHERE Amount >
+(
+   SELECT AVG(Amount)
+   FROM Account
+);
+SELECT C_Id
+FROM Account
+WHERE Amount =
+(
+   SELECT MAX(Amount)
+   FROM Account
+);
+SELECT Acc_Type, Amount
+FROM Account A1
+WHERE Amount =
+(
+   SELECT MIN(A2.Amount)
+   FROM Account A2
+   WHERE A1.Acc_Type = A2.Acc_Type
+);
+SELECT Amount
+FROM Account
+WHERE Amount > ANY
+(
+   SELECT Amount
+   FROM Account
+   WHERE Acc_Type = 'Saving'
+);
