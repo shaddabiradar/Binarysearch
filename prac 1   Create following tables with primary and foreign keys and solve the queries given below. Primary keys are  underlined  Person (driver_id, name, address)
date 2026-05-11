@@ -1,3 +1,22 @@
+Create following tables with primary and foreign keys and solve the queries given below. Primary keys are 
+underlined 
+Person (driver_id, name, address) 
+Car (license, model, year) 
+Accident (report_no, date_acc, location) 
+Owns (driver_id, license) 
+Participated (driver_id,  model,  report_no, damage_amount) 
+1) Insert  5 records into each table 
+2) Display the Schema of each table. 
+3) Display all records from the person table 
+4) Set a Foreign key constraint from Participated.report_no to Accident.report_no. 
+5) Add check constraints on Damage_amount that amt should not be negative. 
+6) Write a query to make the name column in the Person table NOT NULL. 
+7) Rename the Car table to Vehicle. 
+8) Create a new table named new_person from existing person table and drop the table 
+new_person. 
+
+
+
 CREATE TABLE Person (
     driver_id INT PRIMARY KEY,
     name VARCHAR(50),
