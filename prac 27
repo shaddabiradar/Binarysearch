@@ -1,0 +1,75 @@
+Set 27 
+Collection “movies“ which contains the documents given as below(Perform on Mongo Terminal)  
+{  
+name: “Movie1”,  
+type: “action”,  
+budget:1000000  
+producer:{  
+name: “producer1”,  
+address:”PUNE”  
+}  
+}  
+i. Find the name of the movie having budget greater than 1,00,000.  
+ii. Find the name of producer who lives in Pune  
+iii. Update the type of movie “action” to “horror”  
+iv. Find all the documents produced by name “producer1” with their address  
+
+
+
+
+use moviedb
+
+db.createCollection("movies")
+
+db.movies.insertOne({
+name:"Movie1",
+type:"action",
+budget:1000000,
+producer:{
+name:"producer1",
+address:"PUNE"
+}
+})
+
+// 1. Find movie names having budget greater than 100000
+
+db.movies.find(
+{
+budget:{$gt:100000}
+},
+{
+name:1,
+_id:0
+}
+)
+
+// 2. Find producer names living in Pune
+
+db.movies.find(
+{
+"producer.address":"PUNE"
+},
+{
+"producer.name":1,
+_id:0
+}
+)
+
+// 3. Update movie type from action to horror
+
+db.movies.updateMany(
+{
+type:"action"
+},
+{
+$set:{type:"horror"}
+}
+)
+
+// 4. Find documents produced by producer1
+
+db.movies.find(
+{
+"producer.name":"producer1"
+}
+)
