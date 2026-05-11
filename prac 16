@@ -1,0 +1,23 @@
+Set 16 
+Write a program that will prompt for number and display whether the number is ODD or EVEN 
+number.Add user defined exception to check the number is negative.
+
+
+
+DECLARE
+    n NUMBER := &n;
+    negative_number EXCEPTION;
+BEGIN
+    IF n < 0 THEN
+        RAISE negative_number;
+    ELSIF MOD(n,2)=0 THEN
+        DBMS_OUTPUT.PUT_LINE('EVEN NUMBER');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('ODD NUMBER');
+    END IF;
+
+EXCEPTION
+    WHEN negative_number THEN
+        DBMS_OUTPUT.PUT_LINE('NEGATIVE NUMBER');
+END;
+/
