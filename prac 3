@@ -1,0 +1,51 @@
+CREATE TABLE Department (
+    dept_id NUMBER PRIMARY KEY,
+    dept_name VARCHAR2(20),
+    location VARCHAR2(20)
+);
+CREATE TABLE Employee (
+    emp_id NUMBER PRIMARY KEY,
+    emp_name VARCHAR2(20),
+    city VARCHAR2(20),
+    salary NUMBER,
+    department NUMBER,
+    FOREIGN KEY (department) REFERENCES Department(dept_id)
+);
+DESC Department;
+DESC Employee;
+INSERT INTO Department VALUES (1,'IT','Mumbai');
+INSERT INTO Department VALUES (2,'HR','Pune');
+INSERT INTO Department VALUES (3,'Sales','Delhi');
+INSERT INTO Department VALUES (4,'Finance','Nashik');
+INSERT INTO Department VALUES (5,'Marketing','Nagpur');
+INSERT INTO Department VALUES (6,'Admin','Aurangabad');
+INSERT INTO Department VALUES (7,'Support','Chennai');
+INSERT INTO Department VALUES (8,'Production','Hyderabad');
+INSERT INTO Department VALUES (9,'Research','Bangalore');
+INSERT INTO Department VALUES (10,'Testing','Pune');
+INSERT INTO Employee VALUES (101,'Neha','Mumbai',30000,1);
+INSERT INTO Employee VALUES (102,'Tejas','Pune',25000,2);
+INSERT INTO Employee VALUES (103,'Amit','Delhi',40000,3);
+INSERT INTO Employee VALUES (104,'Meena','Nashik',35000,4);
+INSERT INTO Employee VALUES (105,'Rekha','Nagpur',28000,5);
+INSERT INTO Employee VALUES (106,'Deepak','Aurangabad',45000,6);
+INSERT INTO Employee VALUES (107,'Ketan','Chennai',32000,7);
+INSERT INTO Employee VALUES (108,'Seema','Hyderabad',50000,8);
+INSERT INTO Employee VALUES (109,'Veena','Bangalore',42000,9);
+INSERT INTO Employee VALUES (110,'Jeet','Pune',38000,10);
+INSERT INTO Department VALUES (11,'Security','Pune');
+INSERT INTO Employee (emp_id, emp_name, city, department)
+VALUES (111,'Ramesh','Pune',1);
+UPDATE Employee
+SET salary = salary + (salary * 0.20);
+SELECT emp_name, salary*12 AS Annual_Salary
+FROM Employee
+WHERE emp_name LIKE '_e%';
+UPDATE Employee
+SET city = 'Pune'
+WHERE department =
+(
+   SELECT dept_id
+   FROM Department
+   WHERE dept_name = 'IT'
+);
