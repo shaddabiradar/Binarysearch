@@ -1,0 +1,131 @@
+Set 24 
+Create below tables employee and department, insert 5 records each and solve the following queries 
+ Name                                      Null?                         Type 
+ ----------------------------------------- -------- ---------------------------- 
+ EMPLOYEE_ID                   NOT NULL    NUMBER(6) 
+ FIRST_NAME                                              VARCHAR2(20) 
+ LAST_NAME                      NOT NULL     VARCHAR2(25) 
+ EMAIL                                 NOT NULL     VARCHAR2(25) 
+ PHONE_NUMBER                                       VARCHAR2(20) 
+ HIRE_DATE                        NOT NULL      DATE 
+ JOB_ID                                 NOT NULL     VARCHAR2(10) 
+ SALARY                                                NUMBER(8,2) 
+ COMMISSION_PCT                                     NUMBER(2,2) 
+ MANAGER_ID                                             NUMBER(6) 
+ DEPARTMENT_ID                                      NUMBER(4) 
+  
+ Name                                      Null?               Type 
+ ----------------------------------------- -------- ---------------------------- 
+ DEPARTMENT_ID              NOT NULL  NUMBER(4) 
+ DEPARTMENT_NAME       NOT NULL VARCHAR2(30) 
+ MANAGER_ID                                          NUMBER(6) 
+ LOCATION_ID                                          NUMBER(4) 
+  
+1. Find employees whose salary is greater than ANY employee in department 30.  
+2. Display employees whose salary is greater than ALL employees in department 20.  
+3. List employees working in departments where the job is MANAGER.  
+4. Find employees whose salary is greater than the average salary of their own department.  
+5. Display employees who earn the highest salary in their department.  
+6. Find employees who have the same job as at least one employee in department 20. 
+
+
+SET 24
+CREATE TABLE department
+(
+    department_id NUMBER(4) PRIMARY KEY,
+    department_name VARCHAR2(30) NOT NULL,
+    manager_id NUMBER(6),
+    location_id NUMBER(4)
+);
+CREATE TABLE employee
+(
+    employee_id NUMBER(6) PRIMARY KEY,
+    first_name VARCHAR2(20),
+    last_name VARCHAR2(25) NOT NULL,
+    email VARCHAR2(25) NOT NULL,
+    phone_number VARCHAR2(20),
+    hire_date DATE NOT NULL,
+    job_id VARCHAR2(10) NOT NULL,
+    salary NUMBER(8,2),
+    commission_pct NUMBER(2,2),
+    manager_id NUMBER(6),
+    department_id NUMBER(4),
+    FOREIGN KEY (department_id) REFERENCES department(department_id)
+);
+INSERT INTO department VALUES (10, 'Computer', 101, 1001);
+INSERT INTO department VALUES (20, 'HR', 102, 1002);
+INSERT INTO department VALUES (30, 'Sales', 103, 1003);
+INSERT INTO department VALUES (40, 'Finance', 104, 1004);
+INSERT INTO department VALUES (50, 'Marketing', 105, 1005);
+
+
+INSERT INTO employee 
+VALUES (101, 'Amit', 'Sharma', 'amit@gmail.com', '9876543210',
+TO_DATE('10-01-2020','DD-MM-YYYY'), 'MANAGER', 60000, NULL, NULL, 10);
+
+INSERT INTO employee 
+VALUES (102, 'Neha', 'Patil', 'neha@gmail.com', '9876543211',
+TO_DATE('15-02-2021','DD-MM-YYYY'), 'CLERK', 35000, NULL, 101, 20);
+
+INSERT INTO employee 
+VALUES (103, 'Rahul', 'Verma', 'rahul@gmail.com', '9876543212',
+TO_DATE('20-03-2019','DD-MM-YYYY'), 'ANALYST', 50000, NULL, 101, 30);
+
+INSERT INTO employee 
+VALUES (104, 'Sneha', 'Joshi', 'sneha@gmail.com', '9876543213',
+TO_DATE('05-04-2022','DD-MM-YYYY'), 'MANAGER', 70000, NULL, 101, 20);
+
+INSERT INTO employee 
+VALUES (105, 'Kiran', 'More', 'kiran@gmail.com', '9876543214',
+TO_DATE('25-05-2023','DD-MM-YYYY'), 'CLERK', 45000, NULL, 104, 30);
+
+
+
+SELECT first_name, salary
+FROM employee
+WHERE salary > ANY
+(
+    SELECT salary
+    FROM employee
+    WHERE department_id = 30
+);
+SELECT first_name, salary
+FROM employee
+WHERE salary > ALL
+(
+    SELECT salary
+    FROM employee
+    WHERE department_id = 20
+);
+SELECT first_name, department_id
+FROM employee
+WHERE department_id IN
+(
+    SELECT department_id
+    FROM employee
+    WHERE job_id = 'MANAGER'
+);
+SELECT first_name, salary, department_id
+FROM employee e
+WHERE salary >
+(
+    SELECT AVG(salary)
+    FROM employee
+    WHERE department_id = e.department_id
+);
+SELECT first_name, salary, department_id
+FROM employee e
+WHERE salary =
+(
+    SELECT MAX(salary)
+    FROM employee
+    WHERE department_id = e.department_id
+);
+SELECT first_name, job_id
+FROM employee
+WHERE job_id IN
+(
+    SELECT job_id
+    FROM employee
+    WHERE department_id = 20
+);
