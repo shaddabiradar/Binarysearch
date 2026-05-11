@@ -1,0 +1,36 @@
+SET 5
+1. Create a new user named with Class_div_rollno. 
+2. Grant SELECT permission on the Employee table to a user named Class_div_rollno  
+3. Grant INSERT and UPDATE permissions on the Employee table to Class_div_rollno 
+4. Revoke UPDATE permission from user1. 
+5. Create a role named manager_role. 
+6. Grant SELECT and DELETE privileges on Employee table to manager_role. 
+7. Revoke the role manager_role from user2
+
+CREATE USER C##CE_A_01 IDENTIFIED BY ce01;
+
+GRANT CONNECT, RESOURCE TO C##CE_A_01;
+
+GRANT SELECT
+ON Employees
+TO C##CE_A_01;
+
+GRANT INSERT, UPDATE
+ON Employees
+TO C##CE_A_01;
+
+REVOKE UPDATE
+ON Employees
+FROM C##CE_A_01;
+
+CREATE ROLE C##MANAGER_ROLE;
+
+GRANT SELECT, DELETE
+ON Employees
+TO C##MANAGER_ROLE;
+
+GRANT C##MANAGER_ROLE
+TO C##CE_A_01;
+
+REVOKE C##MANAGER_ROLE
+FROM C##CE_A_01;
