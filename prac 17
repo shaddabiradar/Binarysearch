@@ -6,35 +6,45 @@ If the employee belongs to other DEPTNO then update his salary with SALARY+COMM.
 
 
 
+CREATE TABLE stud (
+    roll NUMBER PRIMARY KEY,
+    att NUMBER,
+    status VARCHAR2(5)
+);
+
+INSERT INTO stud VALUES (1,70,NULL);
+INSERT INTO stud VALUES (2,80,NULL);
+INSERT INTO stud VALUES (3,65,NULL);
+INSERT INTO stud VALUES (12,90,NULL);
+
 DECLARE
-    v_empno NUMBER := &empno;
-    v_deptno NUMBER;
+    v_roll NUMBER := &roll;
+    v_att NUMBER;
 BEGIN
-    SELECT department_id
-    INTO v_deptno
-    FROM employees
-    WHERE employee_id = v_empno;
+    SELECT att
+    INTO v_att
+    FROM stud
+    WHERE roll = v_roll;
 
-    IF v_deptno = 10 THEN
-        UPDATE employees
-        SET salary = salary + (salary * 0.10)
-        WHERE employee_id = v_empno;
+    IF v_att < 75 THEN
+        DBMS_OUTPUT.PUT_LINE('TERM NOT GRANTED');
 
-    ELSIF v_deptno = 20 THEN
-        UPDATE employees
-        SET salary = salary + (salary * 0.15)
-        WHERE employee_id = v_empno;
+        UPDATE stud
+        SET status='D'
+        WHERE roll=v_roll;
 
     ELSE
-        UPDATE employees
-        SET salary = salary + NVL(commission_pct,0)
-        WHERE employee_id = v_empno;
+        DBMS_OUTPUT.PUT_LINE('TERM GRANTED');
+
+        UPDATE stud
+        SET status='ND'
+        WHERE roll=v_roll;
     END IF;
 
     COMMIT;
 
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('EMPLOYEE NOT FOUND');
+        DBMS_OUTPUT.PUT_LINE('STUDENT NOT FOUND');
 END;
 /
