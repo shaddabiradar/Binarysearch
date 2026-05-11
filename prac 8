@@ -1,0 +1,60 @@
+SET 8
+Create the employee table with all constraints. 
+ Name                                      Null?                    Type 
+ ----------------------------------------- -------- ---------------------------- 
+ EMPLOYEE_ID                   NOT NULL     NUMBER(6) 
+ FIRST_NAME                                              VARCHAR2(20) 
+ LAST_NAME                       NOT NULL    VARCHAR2(25) 
+ EMAIL                                  NOT NULL    VARCHAR2(25) 
+ PHONE_NUMBER                                      VARCHAR2(20) 
+ HIRE_DATE                        NOT NULL     DATE 
+ JOB_ID                                 NOT NULL    VARCHAR2(10) 
+ SALARY                                                      NUMBER(8,2) 
+ COMMISSION_PCT                                   NUMBER(2,2) 
+ MANAGER_ID                                            NUMBER(6) 
+ DEPARTMENT_ID                                     NUMBER(4) 
+  
+1. Find the highest, lowest, sum and average salary of all employees. Label the columns. 
+2. write a query to display the number of people with the same job. 
+3. Determine the number of managers without listing them. Label the column number of Managers 
+4. Find the difference between the highest and lowest salaries. Label the column DIFFERENCE. 
+5. Create a report to display the manager number and the salary of the lowest-paid employee for that 
+manager. 
+
+
+
+CREATE TABLE employees (
+    employee_id NUMBER(6) PRIMARY KEY,
+    first_name VARCHAR2(20),
+    last_name VARCHAR2(25) NOT NULL,
+    email VARCHAR2(25) NOT NULL UNIQUE,
+    phone_number VARCHAR2(20),
+    hire_date DATE NOT NULL,
+    job_id VARCHAR2(10) NOT NULL,
+    salary NUMBER(8,2),
+    commission_pct NUMBER(2,2),
+    manager_id NUMBER(6),
+    department_id NUMBER(4)
+);
+
+SELECT MAX(salary) AS HIGHEST,
+       MIN(salary) AS LOWEST,
+       SUM(salary) AS TOTAL,
+       AVG(salary) AS AVERAGE
+FROM employees;
+
+SELECT job_id,
+       COUNT(*) AS TOTAL_EMPLOYEES
+FROM employees
+GROUP BY job_id;
+
+SELECT COUNT(DISTINCT manager_id) AS NUMBER_OF_MANAGERS
+FROM employees;
+
+SELECT MAX(salary)-MIN(salary) AS DIFFERENCE
+FROM employees;
+
+SELECT manager_id,
+       MIN(salary) AS LOWEST_SALARY
+FROM employees
+GROUP BY manager_id;
