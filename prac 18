@@ -1,0 +1,63 @@
+Set 18 
+Unnamed PL/SQL code block: Use of Control structure and Exception handling is mandatory. Write a PL/SQL 
+block of code for the following requirements:-Consider table Stud(Roll, Att,Status) Write a PL/SQL block for 
+following requirement and handle the exceptions. Roll no. of student will be entered by user. Attendance of 
+roll no. entered by user will be checked in Stud table. If attendance is less than 75% then display the message 
+“Term not granted” and set the status in stud table as “D”. Otherwise display message “Term granted” and 
+set the status in stud table as “ND”  
+
+
+
+CREATE TABLE Stud
+(
+    Roll NUMBER PRIMARY KEY,
+    Att NUMBER,
+    Status VARCHAR2(5)
+);
+INSERT INTO Stud VALUES (1, 82, NULL);
+INSERT INTO Stud VALUES (2, 65, NULL);
+INSERT INTO Stud VALUES (3, 90, NULL);
+INSERT INTO Stud VALUES (4, 70, NULL);
+INSERT INTO Stud VALUES (5, 75, NULL);
+
+
+DECLARE
+    rno NUMBER;
+    attendance NUMBER;
+
+BEGIN
+    rno := &roll_no;
+
+    SELECT Att
+    INTO attendance
+    FROM Stud
+    WHERE Roll = rno;
+
+    IF attendance < 75 THEN
+
+        UPDATE Stud
+        SET Status = 'D'
+        WHERE Roll = rno;
+
+        DBMS_OUTPUT.PUT_LINE('Term not granted');
+
+    ELSE
+
+        UPDATE Stud
+        SET Status = 'ND'
+        WHERE Roll = rno;
+
+        DBMS_OUTPUT.PUT_LINE('Term granted');
+
+    END IF;
+
+EXCEPTION
+
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Student not found');
+
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error occurred');
+
+END;
+/
