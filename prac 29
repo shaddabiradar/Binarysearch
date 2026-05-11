@@ -1,0 +1,91 @@
+Set 29 
+Perform aggregation and Indexing using mongodb on below database  
+1. Create a database department  
+2. Create a collection as teacher with fields as name , department ,experience and salary  
+3. Display the department wise average salary.  
+4. Display the no. Of employees working in each department.  
+5. Display the department wise minimum salary.  
+6. Apply index and drop index  
+
+
+
+
+use department
+
+db.createCollection("teacher")
+
+db.teacher.insertMany([
+{
+name:"Amit",
+department:"IT",
+experience:5,
+salary:50000
+},
+{
+name:"Om",
+department:"COMP",
+experience:4,
+salary:40000
+},
+{
+name:"Pooja",
+department:"IT",
+experience:6,
+salary:60000
+},
+{
+name:"Krushna",
+department:"COMP",
+experience:3,
+salary:35000
+}
+])
+
+// 1. Find department-wise average salary
+
+db.teacher.aggregate([
+{
+$group:{
+_id:"$department",
+avg_salary:{$avg:"$salary"}
+}
+}
+])
+
+// 2. Find number of employees in each department
+
+db.teacher.aggregate([
+{
+$group:{
+_id:"$department",
+total_emp:{$sum:1}
+}
+}
+])
+
+// 3. Find department-wise minimum salary
+
+db.teacher.aggregate([
+{
+$group:{
+_id:"$department",
+min_salary:{$min:"$salary"}
+}
+}
+])
+
+// 4. Create index on name field
+
+db.teacher.createIndex(
+{
+name:1
+}
+)
+
+// 5. Drop index
+
+db.teacher.dropIndex(
+{
+name:1
+}
+)
