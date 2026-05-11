@@ -1,0 +1,87 @@
+SET 7
+Create the table below and solve the following queries. 
+Employees 
+ Name                                      Null?                    Type 
+ ----------------------------------------- -------- ---------------------------- 
+ EMPLOYEE_ID                   NOT NULL     NUMBER(6) 
+ FIRST_NAME                                              VARCHAR2(20) 
+ LAST_NAME                       NOT NULL    VARCHAR2(25) 
+ EMAIL                                  NOT NULL    VARCHAR2(25) 
+ PHONE_NUMBER                                      VARCHAR2(20) 
+ HIRE_DATE                        NOT NULL     DATE 
+ JOB_ID                                 NOT NULL    VARCHAR2(10) 
+ SALARY                                                      NUMBER(8,2) 
+ COMMISSION_PCT                                   NUMBER(2,2) 
+ MANAGER_ID                                            NUMBER(6) 
+ DEPARTMENT_ID                                     NUMBER(4) 
+  
+1. Start a transaction and insert a new employee record. Commit the transaction. 
+2. Start a transaction, update employee salary, and rollback the transaction. 
+3. Start a transaction, create a savepoint named SP1, update salary, and rollback to SP1. 
+4. Demonstrate the use of multiple savepoints within a single transaction. 
+5. Start a transaction, delete an employee record, and commit the changes. 
+
+CREATE TABLE employees (
+    employee_id NUMBER(6) NOT NULL,
+    first_name VARCHAR2(20),
+    last_name VARCHAR2(25) NOT NULL,
+    email VARCHAR2(25) NOT NULL,
+    phone_number VARCHAR2(20),
+    hire_date DATE NOT NULL,
+    job_id VARCHAR2(10) NOT NULL,
+    salary NUMBER(8,2),
+    commission_pct NUMBER(2,2),
+    manager_id NUMBER(6),
+    department_id NUMBER(4)
+);
+
+INSERT INTO employees
+VALUES (
+1001,'Shraddha','Biradar','shraddha@gmail.com',
+'9876543210',SYSDATE,'IT_PROG',
+50000,NULL,101,10
+);
+
+UPDATE employees
+SET salary = 60000
+WHERE employee_id = 1001;
+ROLLBACK;
+
+SAVEPOINT sp1;
+
+UPDATE employees
+SET salary = 70000
+WHERE employee_id = 1001;
+
+ROLLBACK TO sp1;
+
+SAVEPOINT sp1;
+
+UPDATE employees
+SET salary = 55000
+WHERE employee_id = 1001;
+
+SAVEPOINT sp2;
+
+UPDATE employees
+SET department_id = 20
+WHERE employee_id = 1001;
+
+ROLLBACK TO sp2;
+
+SAVEPOINT sp1;
+
+UPDATE employees
+SET salary = 55000
+WHERE employee_id = 1001;
+
+SAVEPOINT sp2;
+
+UPDATE employees
+SET department_id = 20
+WHERE employee_id = 1001;
+
+ROLLBACK TO sp2;
+
+DELETE FROM employees
+WHERE employee_id = 1001;
