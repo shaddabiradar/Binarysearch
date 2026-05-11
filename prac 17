@@ -1,0 +1,40 @@
+Set 17 
+Write program that prompts for EMPNO and update his salary based on the below specification: 
+If the employee belongs to DEPTNO 10 then update his salary by 10%. 
+If the employee belongs to DEPTNO 20 then update his salary by 15%. 
+If the employee belongs to other DEPTNO then update his salary with SALARY+COMM.
+
+
+
+DECLARE
+    v_empno NUMBER := &empno;
+    v_deptno NUMBER;
+BEGIN
+    SELECT department_id
+    INTO v_deptno
+    FROM employees
+    WHERE employee_id = v_empno;
+
+    IF v_deptno = 10 THEN
+        UPDATE employees
+        SET salary = salary + (salary * 0.10)
+        WHERE employee_id = v_empno;
+
+    ELSIF v_deptno = 20 THEN
+        UPDATE employees
+        SET salary = salary + (salary * 0.15)
+        WHERE employee_id = v_empno;
+
+    ELSE
+        UPDATE employees
+        SET salary = salary + NVL(commission_pct,0)
+        WHERE employee_id = v_empno;
+    END IF;
+
+    COMMIT;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('EMPLOYEE NOT FOUND');
+END;
+/
