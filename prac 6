@@ -1,0 +1,150 @@
+Set 6 
+Create the tables below and solve the following queries. 
+Employees 
+ Name                                      Null?                    Type 
+ ----------------------------------------- -------- ---------------------------- 
+ EMPLOYEE_ID                   NOT NULL     NUMBER(6) 
+ FIRST_NAME                                              VARCHAR2(20) 
+ LAST_NAME                       NOT NULL    VARCHAR2(25) 
+ EMAIL                                  NOT NULL    VARCHAR2(25) 
+ PHONE_NUMBER                                      VARCHAR2(20) 
+ HIRE_DATE                        NOT NULL     DATE 
+ JOB_ID                                 NOT NULL    VARCHAR2(10) 
+ SALARY                                                      NUMBER(8,2) 
+ COMMISSION_PCT                                   NUMBER(2,2) 
+ MANAGER_ID                                            NUMBER(6) 
+ DEPARTMENT_ID                                     NUMBER(4) 
+  
+Departments 
+ Name                                      Null?             Type 
+ ----------------------------------------- -------- ---------------------------- 
+ DEPARTMENT_ID            NOT NULL        NUMBER(4) 
+ DEPARTMENT_NAME    NOT NULL        VARCHAR2(30) 
+ MANAGER_ID                                               NUMBER(6) 
+ LOCATION_ID                                               NUMBER(4) 
+ 
+1. Create EmpTest from Emp table by copying structure and data. 
+2. Add a new row into the EmpTest table for Empno,Ename,Sal columns. In Ename should 
+have the Current User. 
+3. Update EmpTest by increasing the Salary of  Vaishali by 15%. Confirm your changes. 
+4. Increase all the employees salary by 10% in EmpTest table who are working in PUNE 
+5. Delete all the Comm data from EmpTest Table. 
+6. Delete all the employees in deptno 10 and do not issue a Commit. 
+7. Issue a Rollback and reflect changes.
+
+
+CREATE TABLE Departments (
+    DEPARTMENT_ID NUMBER(4) PRIMARY KEY,
+    DEPARTMENT_NAME VARCHAR2(30) NOT NULL,
+    MANAGER_ID NUMBER(6),
+    LOCATION_ID NUMBER(4)
+);
+CREATE TABLE Employees (
+    EMPLOYEE_ID NUMBER(6) PRIMARY KEY,
+    FIRST_NAME VARCHAR2(20),
+    LAST_NAME VARCHAR2(25) NOT NULL,
+    EMAIL VARCHAR2(25) NOT NULL,
+    PHONE_NUMBER VARCHAR2(20),
+    HIRE_DATE DATE NOT NULL,
+    JOB_ID VARCHAR2(10) NOT NULL,
+    SALARY NUMBER(8,2),
+    COMMISSION_PCT NUMBER(2,2),
+    MANAGER_ID NUMBER(6),
+    DEPARTMENT_ID NUMBER(4) REFERENCES Departments(DEPARTMENT_ID)
+);
+INSERT INTO Departments
+VALUES (10, 'HR', 101, 1000);
+
+INSERT INTO Departments
+VALUES (20, 'SALES', 102, 2000);
+
+INSERT INTO Departments
+VALUES (30, 'IT', 103, 3000);
+
+INSERT INTO Departments
+VALUES (40, 'PUNE', 104, 4000);
+INSERT INTO Employees
+VALUES (
+101,
+'Vaishali',
+'Patil',
+'VPATIL',
+'9876543210',
+TO_DATE('10-01-2020','DD-MM-YYYY'),
+'HR01',
+50000,
+0.10,
+100,
+10
+);
+INSERT INTO Employees
+VALUES (
+102,
+'Amit',
+'Sharma',
+'ASHARMA',
+'9876500000',
+TO_DATE('15-03-2021','DD-MM-YYYY'),
+'SA01',
+40000,
+0.15,
+101,
+40
+);
+INSERT INTO Employees
+VALUES (
+103,
+'Sneha',
+'Joshi',
+'SJOSHI',
+'9876511111',
+TO_DATE('20-05-2022','DD-MM-YYYY'),
+'IT01',
+45000,
+0.12,
+102,
+30
+);
+CREATE TABLE EmpTest AS
+SELECT * FROM Employees;
+INSERT INTO EmpTest
+(
+EMPLOYEE_ID,
+FIRST_NAME,
+LAST_NAME,
+EMAIL,
+HIRE_DATE,
+JOB_ID,
+SALARY
+)
+VALUES
+(
+200,
+USER,
+'USERLAST',
+'USER@GMAIL.COM',
+SYSDATE,
+'JOB01',
+35000
+);
+UPDATE EmpTest
+SET SALARY = SALARY + (SALARY * 0.15)
+WHERE FIRST_NAME = 'Vaishali';
+SELECT FIRST_NAME, SALARY
+FROM EmpTest
+WHERE FIRST_NAME = 'Vaishali';
+UPDATE EmpTest
+SET SALARY = SALARY + (SALARY * 0.10)
+WHERE DEPARTMENT_ID = 40;
+SELECT EMPLOYEE_ID, FIRST_NAME, SALARY
+FROM EmpTest
+WHERE DEPARTMENT_ID = 40;
+UPDATE EmpTest
+SET COMMISSION_PCT = NULL;
+SELECT EMPLOYEE_ID, COMMISSION_PCT
+FROM EmpTest;
+DELETE FROM EmpTest
+WHERE DEPARTMENT_ID = 10;
+SELECT * FROM EmpTest;
+ROLLBACK;
+SELECT * FROM EmpTest;
