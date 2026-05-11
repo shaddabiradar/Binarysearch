@@ -1,0 +1,36 @@
+Set 15 
+Write a program that will prompt for a EMPNO,ENAME,SAL.If EMPNO does not exists in EMP table then 
+INSERT the EMPNO,ENAME,SAL into the EMP table else UPDATE NAME,SAL for that EMPNO
+
+
+
+
+CREATE TABLE emp (
+    empno NUMBER PRIMARY KEY,
+    ename VARCHAR2(20),
+    sal NUMBER
+);
+
+DECLARE
+    v_empno NUMBER := &empno;
+    v_ename VARCHAR2(20) := '&ename';
+    v_sal NUMBER := &sal;
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM emp
+    WHERE empno = v_empno;
+
+    IF v_count = 0 THEN
+        INSERT INTO emp VALUES (v_empno, v_ename, v_sal);
+    ELSE
+        UPDATE emp
+        SET ename = v_ename,
+            sal = v_sal
+        WHERE empno = v_empno;
+    END IF;
+
+    COMMIT;
+END;
+/
