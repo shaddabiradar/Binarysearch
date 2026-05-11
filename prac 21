@@ -1,0 +1,52 @@
+Set 21 
+Write a program that displays the Top N salaries using simple Explicit Cursors. 
+
+
+
+
+CREATE TABLE Employee
+(
+    emp_id NUMBER,
+    emp_name VARCHAR2(20),
+    salary NUMBER
+);
+INSERT INTO Employee VALUES (1, 'Amit', 50000);
+INSERT INTO Employee VALUES (2, 'Neha', 65000);
+INSERT INTO Employee VALUES (3, 'Rahul', 45000);
+INSERT INTO Employee VALUES (4, 'Sneha', 70000);
+INSERT INTO Employee VALUES (5, 'Kiran', 60000);
+
+
+DECLARE
+    n NUMBER;
+    eid NUMBER;
+    ename VARCHAR2(20);
+    sal NUMBER;
+    count1 NUMBER := 0;
+
+    CURSOR c1 IS
+    SELECT emp_id, emp_name, salary
+    FROM Employee
+    ORDER BY salary DESC;
+
+BEGIN
+    n := &N;
+
+    OPEN c1;
+
+    LOOP
+        FETCH c1 INTO eid, ename, sal;
+
+        EXIT WHEN c1%NOTFOUND OR count1 = n;
+
+        DBMS_OUTPUT.PUT_LINE
+        ('ID: ' || eid || 
+         ' Name: ' || ename || 
+         ' Salary: ' || sal);
+
+        count1 := count1 + 1;
+    END LOOP;
+
+    CLOSE c1;
+END;
+/
