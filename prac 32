@@ -1,0 +1,134 @@
+ Set 32 
+Emp(emp_id,ename, street, city)  
+works(emp_id,c_id,ename, cname, sal)  
+Company(c_id,cname, city)  
+Manager(mgr_id, mgrname)  
+i. Modify the database so that a particular company (eg. ABC) now in Pune  
+ii. Give all managers of Mbank a 10% raise. If salary is >20,000, give only 3% raise.  
+iii. Find out the names of all the employees who works in ‘Bosch’ company in city Pune  
+iv. Delete all records in the works table for employees of a particular company (Eg, SBC Company) whose 
+salary>50,000.  
+
+
+use companydb
+
+db.createCollection("emp")
+db.createCollection("works")
+db.createCollection("company")
+db.createCollection("manager")
+
+// Insert into emp
+
+db.emp.insertMany([
+{
+emp_id:1,
+ename:"Om",
+street:"FC Road",
+city:"Pune"
+},
+{
+emp_id:2,
+ename:"Krushna",
+street:"MG Road",
+city:"Mumbai"
+}
+])
+
+// Insert into works
+
+db.works.insertMany([
+{
+emp_id:1,
+c_id:101,
+ename:"Om",
+cname:"Bosch",
+sal:60000
+},
+{
+emp_id:2,
+c_id:102,
+ename:"Krushna",
+cname:"Mbank",
+sal:25000
+}
+])
+
+// Insert into company
+
+db.company.insertMany([
+{
+c_id:101,
+cname:"Bosch",
+city:"Pune"
+},
+{
+c_id:102,
+cname:"Mbank",
+city:"Mumbai"
+}
+])
+
+// Insert into manager
+
+db.manager.insertMany([
+{
+mgr_id:1,
+mgrname:"Ravi"
+}
+])
+
+// 1. Modify company ABC city to Pune
+
+db.company.updateOne(
+{
+cname:"ABC"
+},
+{
+$set:{city:"Pune"}
+}
+)
+
+// 2. Give all managers of Mbank a 10% raise if salary <=20000
+
+db.works.updateMany(
+{
+cname:"Mbank",
+sal:{$lte:20000}
+},
+{
+$mul:{sal:1.10}
+}
+)
+
+// 3. Give only 3% raise if salary >20000
+
+db.works.updateMany(
+{
+cname:"Mbank",
+sal:{$gt:20000}
+},
+{
+$mul:{sal:1.03}
+}
+)
+
+// 4. Find employee names working in Bosch company
+
+db.works.find(
+{
+cname:"Bosch"
+},
+{
+ename:1,
+_id:0
+}
+)
+
+// 5. Delete SBC company employees whose salary >50000
+
+db.works.deleteMany(
+{
+cname:"SBC",
+sal:{$gt:50000}
+}
+)
