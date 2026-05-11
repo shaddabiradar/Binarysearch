@@ -1,0 +1,96 @@
+Set 19 
+Unnamed PL/SQL code block: Use of Control structure and Exception handling is mandatory.  
+Write a PL/SQL block of code for the following requirements:-  
+Schema:  
+1. Borrower(Rollin, Name, DateofIssue, NameofBook, Status)  
+2. Fine(Roll_no,Date,Amt)  
+Accept roll_no & name of book from user.  
+Check the number of days (from date of issue), if days are between 15 to 30 then fine  
+amount will be Rs 5per day.  
+If no. of days>30, per day fine will be Rs 50 per day & for days less than 30, Rs. 5 per day.  
+After submitting the book, status will change from I to R.  
+If condition of fine is true, then details will be stored into fine table. 
+
+ 
+
+CREATE TABLE Borrower
+(
+    Rollin NUMBER,
+    Name VARCHAR2(20),
+    DateofIssue DATE,
+    NameofBook VARCHAR2(30),
+    Status CHAR(1)
+);
+CREATE TABLE Fine
+(
+    Roll_no NUMBER,
+    Date1 DATE,
+    Amt NUMBER
+);
+INSERT INTO Borrower 
+VALUES (1, 'Amit', SYSDATE-20, 'DBMS', 'I');
+
+INSERT INTO Borrower 
+VALUES (2, 'Neha', SYSDATE-35, 'CN', 'I');
+
+INSERT INTO Borrower 
+VALUES (3, 'Rahul', SYSDATE-10, 'OS', 'I');
+
+
+DECLARE
+    rno NUMBER;
+    bname VARCHAR2(30);
+    issue_date DATE;
+    days NUMBER;
+    fine_amt NUMBER := 0;
+
+BEGIN
+    rno := &roll_no;
+    bname := '&book_name';
+
+    SELECT DateofIssue
+    INTO issue_date
+    FROM Borrower
+    WHERE Rollin = rno
+    AND NameofBook = bname;
+
+    days := SYSDATE - issue_date;
+
+    IF days BETWEEN 15 AND 30 THEN
+        fine_amt := days * 5;
+
+    ELSIF days > 30 THEN
+        fine_amt := (30 * 5) + ((days - 30) * 50);
+
+    ELSE
+        fine_amt := 0;
+    END IF;
+
+    UPDATE Borrower
+    SET Status = 'R'
+    WHERE Rollin = rno
+    AND NameofBook = bname;
+
+    IF fine_amt > 0 THEN
+
+        INSERT INTO Fine
+        VALUES (rno, SYSDATE, fine_amt);
+
+        DBMS_OUTPUT.PUT_LINE('Fine Amount = ' || fine_amt);
+
+    ELSE
+
+        DBMS_OUTPUT.PUT_LINE('No Fine');
+
+    END IF;
+
+EXCEPTION
+
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Record not found');
+
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error occurred');
+
+END;
+/
